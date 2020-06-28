@@ -1,0 +1,37 @@
+---
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: hello-service
+    labels:
+      app: hello
+  spec:
+    ports:
+      - port: 8000
+        name: http
+    selector:
+      app: hello
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-deployment
+  labels:
+    app: hello
+spec:
+  selector:
+    matchLabels:
+      app: hello
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: hello
+    spec:
+      containers:
+        - image: ykoyfman/pyhello
+          imagePullPolicy: Always
+          name: hello
+          ports:
+            - containerPort: 8000
